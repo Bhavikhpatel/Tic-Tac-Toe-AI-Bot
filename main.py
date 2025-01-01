@@ -127,4 +127,26 @@ def main():
         elif is_board_full(st.session_state.board):
             st.info("It's a draw!")
             st.session_state.game_over = True
-        elif st.session_state.current_turn
+        elif st.session_state.current_turn == st.session_state.ai_player:
+            move = get_best_move(st.session_state.board, st.session_state.ai_player, st.session_state.human_player)
+            if move:
+                st.session_state.board[move[0]][move[1]] = st.session_state.ai_player
+                st.session_state.current_turn = st.session_state.human_player
+            if check_winner(st.session_state.board, st.session_state.ai_player):
+                st.error("AI wins!")
+                st.session_state.game_over = True
+            elif is_board_full(st.session_state.board):
+                st.info("It's a draw!")
+                st.session_state.game_over = True
+
+    if st.session_state.game_over and st.button("Play Again"):
+        st.session_state.board = create_board()
+        st.session_state.game_started = False
+        st.session_state.human_player = None
+        st.session_state.ai_player = None
+        st.session_state.current_turn = 'X'
+        st.session_state.game_over = False
+
+if __name__ == "__main__":
+    main()
+            
